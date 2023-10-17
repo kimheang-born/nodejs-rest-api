@@ -171,13 +171,20 @@ exports.deletePost = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      if (post.creator.toString() !== req.user) {
-        const error = new Error('Unauthorized.');
+      if (post.creator.toString() !== req.userId) {
+        const error = new Error('Unauthorized to delete product.');
         error.statusCode = 403;
         throw error;
       }
       clearImage(post.imageUrl);
       return Post.findByIdAndRemove(postId);
+    })
+    .then((result) => {
+      return User.findById(req.userId);
+    })
+    .then((user) => {
+      user.posts.pull(postId);
+      return user.save();
     })
     .then((result) => {
       res.status(200).json({
