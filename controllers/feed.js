@@ -26,17 +26,19 @@ exports.createPost = (req, res, next) => {
     const error = new Error('Validatio failed!');
     error.statusCode = 422;
     throw error;
-    // return res.status(422).json({
-    //   message: 'Validatio failed!',
-    //   errors: errors.array(),
-    // });
+  }
+  if (!req.file) {
+    const error = new Error('No image provided.');
+    error.statusCode = 422;
+    throw error;
   }
 
+  const imageUrl = req.file.path;
   const { title, content } = req.body;
   const post = new Post({
     title,
     content,
-    imageUrl: 'images/duck.jpeg',
+    imageUrl,
     creator: {
       name: 'Kim',
     },
