@@ -3,7 +3,6 @@ const sinon = require('sinon');
 
 const User = require('../models/user');
 const AuthController = require('../controllers/auth');
-const { Result } = require('express-validator');
 
 describe('Auth Controller - Login', () => {
   it('should throw an error with code 500 if accessing the database fails', async () => {
